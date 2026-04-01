@@ -58,3 +58,50 @@ endfunction
 function! autocomplete#register(ft, matches)
     let s:ft_auto_defs[a:ft] = a:matches
 endfunction
+
+function! autocomplete#list()
+    echo s:ft_auto_defs
+endfunction
+
+function! autocomplete#common(comment='', brackets=v:true)
+    " Full width: 80
+    " Medm width: 60
+    " Smol width: 50
+    let wf  = 80
+    let wm  = 60
+    let ws  = 50
+    let sol = '^\s*\zs'
+    let eol = '\s*(//.*)?$'
+    let com = a:comment
+    let ecom = pathutils#escapevregex(a:comment)
+    let Rpt = {c,s -> '\(repeat("'.c.'",'.(s+1).'-col("."))\)'}
+
+    let lcns = join([com.' '.Rpt("=",wf), ''] + split($LICENSE, "\n") + ['', Rpt("=",wf)], '\n'.com." ").'\n'
+    let desc = com.' '.Rpt("-",ws).'\n'.com.' \1: \2\n'.com.' - \3\:\n'.com.' '.Rpt("-",ws).'\n'
+    let head = com.' '.Rpt("=",wf).'\n' .
+             \ com.' File        : \<%\>\n' .
+             \ com.' Author      : \<$USER\>\n' .
+             \ com.' Created     : \d\n' .
+             \ com.' Description : \n' .
+             \ com.' '.Rpt("=",wf).'\n\:\n'
+
+    let matches = [
+    \   ['\v'.sol.'\=( (.*))?'.eol          , '\!'.com.com.'\1 '.Rpt('=', wm)],
+    \   ['\v'.sol.ecom.ecom.'( (.*))?'.eol  , '\!'.com.com.'\1 '.Rpt('=', wm)],
+    \   ['\v'.sol.'-( (.*))?'.eol           , '\!'.com.'\1 '.Rpt('-', wm)],
+    \   ['\v'.sol.ecom.'( (.*))?'.eol       , '\!'.com.'\1 '.Rpt('-', wm)],
+    \   ['\v^desc\s+(\w+)\s+(\w+)\s*(.*)$'  , '\!'.desc],
+    \   ['\v^license'.eol                   , '\!'.lcns],
+    \   ['\v^head'.eol                      , '\!'.head],
+    \ ]
+
+    if a:brackets
+        let matches = extend(matches, [
+                \ ['\v\([^)]*'.eol   , '\N\:\n)'],
+                \ ['\v\[[^\]]*'.eol  , '\N\:\n]'],
+                \ ['\v\{[^}]*'.eol   , '\N\:\n}'],
+                \ ])
+    endif
+
+    return matches
+endfunction
