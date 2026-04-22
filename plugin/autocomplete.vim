@@ -86,13 +86,13 @@ function! autocomplete#common(comment='', brackets=v:true)
              \ com.' '.Rpt("=",wf).'\n\:\n'
 
     let matches = [
-    \   ['\v'.sol.'\=( (.*))?'.eol          , '\!'.com.com.'\1 '.Rpt('=', wm)],
-    \   ['\v'.sol.ecom.ecom.'( (.*))?'.eol  , '\!'.com.com.'\1 '.Rpt('=', wm)],
-    \   ['\v'.sol.'-( (.*))?'.eol           , '\!'.com.'\1 '.Rpt('-', wm)],
-    \   ['\v'.sol.ecom.'( (.*))?'.eol       , '\!'.com.'\1 '.Rpt('-', wm)],
-    \   ['\v^desc\s+(\w+)\s+(\w+)\s*(.*)$'  , '\!'.desc],
-    \   ['\v^license'.eol                   , '\!'.lcns],
-    \   ['\v^head'.eol                      , '\!'.head],
+    \   ['\v'.sol.'\=( (.*))?'.eol              , '\!'.com.com.'\1 '.Rpt('=', wm)],
+    \   ['\v'.sol.ecom.ecom.'( (.*))?'.eol      , '\!'.com.com.'\1 '.Rpt('=', wm)],
+    \   ['\v'.sol.'-( (.*))?'.eol               , '\!'.com.'\1 '.Rpt('-', wm)],
+    \   ['\v'.sol.ecom.'( (.*))?'.eol           , '\!'.com.'\1 '.Rpt('-', wm)],
+    \   ['\v'.sol.'desc\s+(\w+)\s+(\w+)\s*(.*)$', '\!'.desc],
+    \   ['\v^license'.eol                       , '\!'.lcns],
+    \   ['\v^head'.eol                          , '\!'.head],
     \ ]
 
     if a:brackets
