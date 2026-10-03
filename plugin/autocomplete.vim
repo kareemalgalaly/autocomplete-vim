@@ -20,7 +20,7 @@ function! autocomplete#main(marker, default, trusted_ft)
     if _match == [] | return a:default | endif
 
     let _i = 0
-    let _spchr = '((_|\^)?\d|[!:nN<>()dtb])'
+    let _spchr = '((_|\^)?\d|[!:nN<>()dtb\\])'
     let _expan = substitute(_expan, '\v\\'._spchr, '\\\0', "g")
     let _expan = substitute(_expan, '\v\\\\(\\'._spchr.')', '\1', "g")
 
@@ -36,8 +36,8 @@ function! autocomplete#main(marker, default, trusted_ft)
         elseif chunk[0]   == 'n'      | let _expan = _expan . "\<CR>"                         . chunk[1:]
         elseif chunk[0]   == 'N'      | let _expan = _expan . "\<CR> \<BS>"                   . chunk[1:]
         elseif chunk[0]   == ':'      | let _expan = _expan . "\<Esc>m".a:marker."a"          . chunk[1:] | let _marker = 1
-        elseif chunk[0:1] =~ '\^\d'   | let _expan = _expan . tolower(_match[chunk[0] + 0])   . chunk[2:]
-        elseif chunk[0:1] =~ '_\d'    | let _expan = _expan . toupper(_match[chunk[0] + 0])   . chunk[2:]
+        elseif chunk[0:1] =~ '_\d'    | let _expan = _expan . tolower(_match[chunk[0] + 1])   . chunk[2:]
+        elseif chunk[0:1] =~ '\^\d'   | let _expan = _expan . toupper(_match[chunk[0] + 1])   . chunk[2:]
         elseif chunk[0]   == '!'      | let _expan = _expan . repeat("\<BS>", len(_match[0])) . chunk[1:]
         elseif chunk[0]   == '<'      | let _expan = _expan . expand(chunk[1:])                           | let _skip = 1
        "elseif chunk[0]   == '(' && t | let _expan = _expan . eval(chunk[1:])                             | let _skip = 1
@@ -45,6 +45,7 @@ function! autocomplete#main(marker, default, trusted_ft)
         elseif chunk[0]   == 'd'      | let _expan = _expan . strftime("%Y %b %d")            . chunk[1:]
         elseif chunk[0]   == 't'      | let _expan = _expan . strftime("%Y %b %d %X")         . chunk[1:]
         elseif chunk[0]   == 'b'      | let _expan = _expan . "\<BS>"                         . chunk[1:]
+        elseif chunk[0]   == '\'      | let _expan = _expan . '\'                             . chunk[1:]
         endif
     endfor
 
