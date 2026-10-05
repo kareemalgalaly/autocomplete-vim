@@ -1,4 +1,4 @@
-" MIT LICENSE Copyright (c) 2024-2025 Kareem Ahmad.
+" MIT LICENSE Copyright (c) 2024-2026 Kareem Ahmad.
 " Autocomplete plugin
 
 let s:ft_auto_defs = {}
